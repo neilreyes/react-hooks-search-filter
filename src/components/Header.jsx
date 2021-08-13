@@ -4,7 +4,7 @@ import {  Link } from 'react-router-dom'
 const Header = () => {
 	return (
 		<div>
-			<h1><Link to='/'>Countries directory</Link></h1>
+			<h1><Link to='/'>World Index</Link></h1>
 		</div>
 	)
 }

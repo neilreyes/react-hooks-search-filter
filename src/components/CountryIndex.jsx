@@ -1,24 +1,20 @@
 import React from 'react'
-import CountryEntry from "./CountryEntry";
+import Countries from './Countries';
+import LayoutToggle from './LayoutToggle';
 
+import Pagination from './Pagination';
+import SearchForm from './SearchForm';
 
-const CountryIndex = ({filteredCountries, setSearch}) => {
+const CountryIndex = (props) => {
+	const {fetchCountries, filteredCountries, setSearch, postsPerPage, totalPosts, paginate} = props;
+
 	return (<>
-		<section className='search-bar'>
-			<input
-				type='text'
-				onChange={(e) => setSearch(e.target.value)}
-				placeholder='Search countries'
-			/>
-		</section>
-		<section className='countries'>
-			{filteredCountries.map((country, key) => {
-				return (
-					<CountryEntry {...country} key={key} />
-				)
-			})}
-		</section>
-		</>)
+		{`Showing ${filteredCountries.length} of ${totalPosts}`}
+		<LayoutToggle />
+		<SearchForm setSearch={setSearch} fetchCountries={fetchCountries}/>
+		<Countries filteredCountries={filteredCountries} />
+		<Pagination paginate={paginate} postsPerPage={postsPerPage} totalPosts={totalPosts} />
+	</>)
 }
 
 export default CountryIndex
