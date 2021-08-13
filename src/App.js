@@ -80,6 +80,7 @@ const App = () => {
                 <Route exact path='/'>
                     <CountryIndex
                         postsPerPage={postsPerPage}
+                        setPostsPerPage={setPostsPerPage}
                         totalPosts={getTotalPosts()}
                         filteredCountries={currentCountries}
                         paginate={paginate}
