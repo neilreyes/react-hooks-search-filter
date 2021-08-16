@@ -11,10 +11,10 @@ const useStyles = makeStyles({
 	}
 })
 
-const CountrySummaryRow = (props) => {
+const CountrySummaryRow = ({name, flag}) => {
 	const [toggle, setToggle] = useState(false);
 	const { cardMedia } = useStyles()
-	const slug = slugify(props.name);
+	const slug = slugify(name);
 	const onClick = (e) => {
 		setToggle(!toggle);
 	};
@@ -25,18 +25,19 @@ const CountrySummaryRow = (props) => {
 				<Grid 
 					container
 					justifyContent='space-between'
+					alignItems='center'
 					id={slug}
 					className={`CountryEntry CountryEntry-row ${toggle? 'active' : ''}`}
 					onClick={onClick}>
 					<Grid item>
-						<Link to={`/countries/${props.name}`} className='country-entry-permalink flag-name' style={{textDecoration: 'none', color: '#000'}}>
+						<Link to={`/countries/${name}`} className='country-entry-permalink flag-name' style={{textDecoration: 'none', color: '#000'}}>
 							<Grid container alignItems='center'>
 								<Grid item>
-									<CardMedia image={props.flag} title={props.name} className={cardMedia}/>
+									<CardMedia image={flag} title={name} className={cardMedia}/>
 								</Grid>
 								<Grid item>
 									<Box pl='10px'>
-										<Typography variant='subtitle1'>{props.name}</Typography>
+										<Typography variant='subtitle1'>{name}</Typography>
 									</Box>
 								</Grid>
 							</Grid>

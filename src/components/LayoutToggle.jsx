@@ -6,12 +6,7 @@ import { Button, ButtonGroup, Grid } from '@material-ui/core'
 const LayoutToggle = ({summaryLayout, setSummaryLayout, setLoading}) => {
 
 	const handleClick = (layout) =>{
-		setLoading(true)
 		setSummaryLayout(layout)
-
-		setTimeout(() => {
-			setLoading(false)
-		}, 1000);
 	}
 	return (
 		<Grid item>

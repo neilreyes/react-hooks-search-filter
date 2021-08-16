@@ -2,13 +2,17 @@ import React from 'react'
 import CountrySummaryRow from './CountrySummaryRow';
 import CountrySummaryGrid from './CountrySummaryGrid';
 
-import { Grid } from '@material-ui/core';
+import { Grid, Typography, Box } from '@material-ui/core';
 
 const Countries = (props) => {
 	const { filteredCountries, summaryLayout } = props;
 
 	if(filteredCountries.length === 0){
-		return (<section className='countries'>Search keyword 'keyword here..' not found</section>)
+		return (<Grid container id='notFound'><Grid item xs={12}><Box  style={{padding: '20px 0'}}>
+			<Typography variant='h6'>
+				Search keyword <strong>'{props.search}'</strong> not found
+			</Typography>
+		</Box></Grid></Grid>)
 	}
 
 	return (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Loading from '../Loading'
-import { Breadcrumbs, Container, Typography } from '@material-ui/core';
+import { Breadcrumbs, Typography } from '@material-ui/core';
 
 const CountryPage = (props) => {
 	const [country, setCountry] = useState([]);
@@ -20,13 +20,7 @@ const CountryPage = (props) => {
 
 	useEffect(() => {
 		fetchCountry(slug)
-	}, []);
-
-	const renderBreadcrumbRegionalBlock = () => {
-		if(country.data[0].regionalBlocs.length > 0){
-			return <Link to='/' color='inherit'>{country.data[0].regionalBlocs[0].name}</Link>
-		}
-	}
+	}, [slug]);
 
 	if (country.status !== 200) {
         return <Loading></Loading>;
@@ -34,7 +28,7 @@ const CountryPage = (props) => {
 
 	return (
 		<>
-			{console.log(country.data[0])}
+			{/* {console.log(country.data[0])} */}
 			<Breadcrumbs aria-label='breadcrumb'>
 				<Link to='/' color='inherit'>Directory</Link>
 				<Link to='/' color='inherit'>{country.data[0].region}</Link>

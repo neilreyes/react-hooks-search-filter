@@ -1,8 +1,8 @@
 import React from 'react'
-import { useFormik } from 'formik'
-import { alpha, Button, InputBase, makeStyles, TextField, Toolbar } from '@material-ui/core';
+import { alpha, Button, Grid, InputBase, makeStyles, Toolbar } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { Paper } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 
 const styles = makeStyles(theme=>({
 	root: {
@@ -18,7 +18,7 @@ const styles = makeStyles(theme=>({
 		display: 'block',
 		},
 	},
-	search: {
+	searchContainer: {
 		position: 'relative',
 		display: 'flex',
 		alignItems: 'center',
@@ -27,7 +27,7 @@ const styles = makeStyles(theme=>({
 		'&:hover': {
 		backgroundColor: alpha(theme.palette.common.white, 0.25),
 		},
-		marginLeft: 0,
+		marginLeft: 0, 
 		width: '100%',
 		[theme.breakpoints.up('sm')]: {
 			marginLeft: theme.spacing(1),
@@ -52,12 +52,6 @@ const styles = makeStyles(theme=>({
 		paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
 		transition: theme.transitions.create('width'),
 		width: '100%',
-		[theme.breakpoints.up('sm')]: {
-		width: '12ch',
-		'&:focus': {
-			width: '20ch',
-		},
-		},
 	},
 	paper: {
 		margin: '25px 0'
@@ -65,51 +59,37 @@ const styles = makeStyles(theme=>({
 }))
 
 const SearchForm = (props) => {
-	const { setSearch, fetchCountries } = props
+	const { setSearch, search } = props
+	const { searchContainer, searchIcon, paper } = styles()
 
-	const { search, searchIcon, paper } = styles()
-	
-	const formik = useFormik({
-		initialValues: {
-			keyword: ''
-		},
-		onSubmit: values => {
-			if(values.keyword.length === 0){
-				fetchCountries()
-			}
-			setSearch(values.keyword)
-		}
-	})  
+	const handleOnChange = (e) => {
+		setSearch(e.target.value)
+	}
 	return (
-		<Paper className={paper}>
-			<Toolbar>
-				{/* <form onSubmit={formik.handleSubmit}>
-					<TextField
-						fullWidth
-						id='keyword'
-						name='keyword'
-						label='Search keyword'
-						value={formik.values.keyword}
-					/>
-					<Button color="primary" variant="contained" fullWidth type="submit">
-						Submit
-					</Button>
-				</form>
-
-				<form onSubmit={formik.handleSubmit}>
-					<label htmlFor="keyword">Search for a country</label>
-					<input type="text" id="keyword" name='keyword' onChange={formik.handleChange} value={formik.values.keyword} />
-					<button type="submit">Submit</button>
-				</form> */}
-
-				<div className={search}>
-					<div className={searchIcon}>
-						<SearchIcon />	
-					</div>
-					<InputBase placeholder='Search a country' classes={{root: styles.inputRoot}} inputProps={{'aria-label':'search'}}/>
-				</div>
-			</Toolbar>
-		</Paper>
+		<Grid container id='searchBar'>
+			<Grid item xs={12}>
+				<Paper className={paper}>
+					<Toolbar>
+						<div className={searchContainer}>
+							<div className={searchIcon}>
+								<SearchIcon />	
+							</div>
+							<InputBase
+								id='keyword'
+								name='keyword'
+								onChange={handleOnChange}
+								placeholder='Search a country'
+								classes={{root: styles.inputRoot}}
+								value={search}
+								inputProps={{'aria-label':'search'}}
+								style={{width: '100%'}}
+								/>
+							{search && <Button onClick={()=>setSearch('')}><CloseIcon/></Button>}
+						</div>
+					</Toolbar>
+				</Paper>
+			</Grid>
+		</Grid>
 	)
 }
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import {Link} from 'react-router-dom';
-import Paper from '@material-ui/core/Paper'
 import {Card, CardActionArea, CardHeader, CardMedia, Grid, makeStyles} from '@material-ui/core'
 
 const useStyles = makeStyles({
@@ -16,8 +15,7 @@ const useStyles = makeStyles({
 	}
 })
 
-const CountrySummaryGrid = (props) => {
-	const { name, nativeName, currencies, flag } = props
+const CountrySummaryGrid = ({ name, nativeName, flag }) => {
 	const { root, media, permalink} = useStyles()
 
 	return (
@@ -31,20 +29,6 @@ const CountrySummaryGrid = (props) => {
 				</CardActionArea>
 			</Card>
 		</Grid>
-		// <Paper>
-		// 	<article ref={ref} className='CountryEntry CountryEntry-grid' onClick={onClick}>
-		// 		<div className='flag-name'>
-		// 			<Link to={`/countries/${props.name}`} className='country-entry-permalink flag-name'>
-		// 				<div className='country-flag-wrapper'>
-		// 					<img src={props.flag} alt={props.name} className='country-flag' />
-		// 				</div>
-		// 				<h3 className={`country-name`}>{props.name}</h3>
-		// 				<p className='nativeName'>{props.nativeName}</p>
-		// 				<p className='currencies'>Currency: {props.currencies[0].code} ({props.currencies[0].symbol})</p>
-		// 			</Link>
-		// 		</div>
-		// 	</article >
-		// </Paper>
 	)
 }
 

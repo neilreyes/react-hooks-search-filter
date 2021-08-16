@@ -5,15 +5,17 @@ import { Switch, Route } from "react-router-dom";
 import CountryIndex from "./components/CountryIndex";
 import CountryPage from "./components/pages/CountryPage";
 import Header from "./components/Header";
-import Loading from "./components/Loading";
-import SearchResult from "./components/pages/SearchResult";
 import { Container } from "@material-ui/core";
+
+import useDebounce from "./utils/useDebounce";
 
 const App = () => {
     const [countries, setCountries] = useState([]);
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
     const [filteredCountries, setFilteredCountries] = useState([]);
+
+    const debouncedSearch = useDebounce(search, 500);
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
@@ -26,6 +28,8 @@ const App = () => {
         indexOfFirstCountry,
         indexOfLastCountry
     );
+
+    const [summaryLayout, setSummaryLayout] = useState("grid");
 
     const paginate = (pageNumber) => {
         setLoading(true);
@@ -48,37 +52,37 @@ const App = () => {
     };
 
     const getTotalPosts = () => {
-        if (search === "" && countries.length !== 0) {
+        if (debouncedSearch === "" && countries.length !== 0) {
             return countries.data.length;
         }
         return currentCountries.length;
     };
 
     const render = () => {
-        if (loading || countries.data === undefined) {
-            return <Loading></Loading>;
-        } else {
-            return (
-                <Switch>
-                    <Route exact path='/'>
-                        <CountryIndex
-                            postsPerPage={postsPerPage}
-                            setPostsPerPage={setPostsPerPage}
-                            totalPosts={getTotalPosts()}
-                            filteredCountries={currentCountries}
-                            paginate={paginate}
-                            fetchCountries={fetchCountries}
-                            setSearch={setSearch}
-                            setLoading={setLoading}
-                        />
-                    </Route>
-                    <Route path='/countries/:slug'>
-                        <CountryPage setLoading={setLoading} />
-                    </Route>
-                    <Route path='/:region'>test</Route>
-                </Switch>
-            );
-        }
+        return (
+            <Switch>
+                <Route exact path='/'>
+                    <CountryIndex
+                        postsPerPage={postsPerPage}
+                        setPostsPerPage={setPostsPerPage}
+                        totalPosts={getTotalPosts()}
+                        filteredCountries={currentCountries}
+                        paginate={paginate}
+                        fetchCountries={fetchCountries}
+                        debouncedSearch={debouncedSearch}
+                        searchKeyword={search}
+                        setSearch={setSearch}
+                        loading={loading}
+                        setLoading={setLoading}
+                        summaryLayout={summaryLayout}
+                        setSummaryLayout={setSummaryLayout}
+                    />
+                </Route>
+                <Route path='/countries/:slug'>
+                    <CountryPage setLoading={setLoading} />
+                </Route>
+            </Switch>
+        );
     };
 
     useEffect(() => {
@@ -87,11 +91,13 @@ const App = () => {
         }
         setFilteredCountries(
             countries.data.filter((country) =>
-                country.name.toLowerCase().includes(search.toLowerCase())
+                country.name
+                    .toLowerCase()
+                    .includes(debouncedSearch.toLowerCase())
             )
         );
         paginate(1);
-    }, [search, countries]);
+    }, [debouncedSearch, countries]);
 
     useEffect(() => {
         fetchCountries();
