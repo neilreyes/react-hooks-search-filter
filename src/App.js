@@ -7,6 +7,7 @@ import CountryPage from "./components/pages/CountryPage";
 import Header from "./components/Header";
 import Loading from "./components/Loading";
 import SearchResult from "./components/pages/SearchResult";
+import { Container } from "@material-ui/core";
 
 const App = () => {
     const [countries, setCountries] = useState([]);
@@ -16,7 +17,7 @@ const App = () => {
 
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage, setPostsPerPage] = useState(10);
+    const [postsPerPage, setPostsPerPage] = useState(20);
 
     // Get current countries/posts
     const indexOfLastCountry = currentPage * postsPerPage;
@@ -36,7 +37,7 @@ const App = () => {
         try {
             setLoading(true);
             const data = await axios.get(
-                "https://restcountries.eu/rest/v2/all?fields=name;flag"
+                "https://restcountries.eu/rest/v2/all?fields=name;flag;nativeName;currencies"
             );
             setCountries(data);
             setLoading(false);
@@ -47,10 +48,37 @@ const App = () => {
     };
 
     const getTotalPosts = () => {
-        if (search === "") {
+        if (search === "" && countries.length !== 0) {
             return countries.data.length;
         }
         return currentCountries.length;
+    };
+
+    const render = () => {
+        if (loading || countries.data === undefined) {
+            return <Loading></Loading>;
+        } else {
+            return (
+                <Switch>
+                    <Route exact path='/'>
+                        <CountryIndex
+                            postsPerPage={postsPerPage}
+                            setPostsPerPage={setPostsPerPage}
+                            totalPosts={getTotalPosts()}
+                            filteredCountries={currentCountries}
+                            paginate={paginate}
+                            fetchCountries={fetchCountries}
+                            setSearch={setSearch}
+                            setLoading={setLoading}
+                        />
+                    </Route>
+                    <Route path='/countries/:slug'>
+                        <CountryPage setLoading={setLoading} />
+                    </Route>
+                    <Route path='/:region'>test</Route>
+                </Switch>
+            );
+        }
     };
 
     useEffect(() => {
@@ -69,33 +97,11 @@ const App = () => {
         fetchCountries();
     }, []);
 
-    if (loading || countries.data === undefined) {
-        return <Loading></Loading>;
-    }
-
     return (
-        <div className='App container'>
+        <>
             <Header />
-            <Switch>
-                <Route exact path='/'>
-                    <CountryIndex
-                        postsPerPage={postsPerPage}
-                        setPostsPerPage={setPostsPerPage}
-                        totalPosts={getTotalPosts()}
-                        filteredCountries={currentCountries}
-                        paginate={paginate}
-                        fetchCountries={fetchCountries}
-                        setSearch={setSearch}
-                    />
-                </Route>
-                <Route path='/search'>
-                    <SearchResult />
-                </Route>
-                <Route path='/countries/:slug'>
-                    <CountryPage setLoading={setLoading} />
-                </Route>
-            </Switch>
-        </div>
+            <Container>{render()}</Container>
+        </>
     );
 };
 

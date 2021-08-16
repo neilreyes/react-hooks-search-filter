@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Loading from '../Loading'
+import { Breadcrumbs, Container, Typography } from '@material-ui/core';
 
 const CountryPage = (props) => {
 	const [country, setCountry] = useState([]);
@@ -21,16 +22,27 @@ const CountryPage = (props) => {
 		fetchCountry(slug)
 	}, []);
 
-	if (props.loading || country.data === undefined) {
+	const renderBreadcrumbRegionalBlock = () => {
+		if(country.data[0].regionalBlocs.length > 0){
+			return <Link to='/' color='inherit'>{country.data[0].regionalBlocs[0].name}</Link>
+		}
+	}
+
+	if (country.status !== 200) {
         return <Loading></Loading>;
     }
 
 	return (
-		<div>
-			{console.log(country)}
-			<h1>{slug}</h1>
-			<img src={country.data[0].flag} alt={country.data[0].name} />
-		</div>
+		<>
+			{console.log(country.data[0])}
+			<Breadcrumbs aria-label='breadcrumb'>
+				<Link to='/' color='inherit'>Directory</Link>
+				<Link to='/' color='inherit'>{country.data[0].region}</Link>
+				<Typography color='textPrimary'>{slug}</Typography>
+			</Breadcrumbs>
+			<Typography variant='h2'>{slug}</Typography>
+			<img src={country.data[0].flag} alt={country.data[0].name} width='200'/>
+		</>
 	)
 }
 

@@ -2,15 +2,18 @@ import React from 'react'
 import CountrySummaryRow from './CountrySummaryRow';
 import CountrySummaryGrid from './CountrySummaryGrid';
 
+import { Grid } from '@material-ui/core';
+
 const Countries = (props) => {
 	const { filteredCountries, summaryLayout } = props;
 
 	if(filteredCountries.length === 0){
-		return (<section className='countries'>Search keyword not found</section>)
+		return (<section className='countries'>Search keyword 'keyword here..' not found</section>)
 	}
 
 	return (
-		<section className='countries'>
+		
+		<Grid container spacing={3}>
 			{filteredCountries.map((country, key) => {
 
 				if(summaryLayout === 'grid'){
@@ -20,12 +23,12 @@ const Countries = (props) => {
 				} else {
 					return (
 						<CountrySummaryRow {...country} key={key}/>
-						
 					)
 				}
 				
 			})}
-		</section>
+		</Grid>
+		
 	)
 }
 

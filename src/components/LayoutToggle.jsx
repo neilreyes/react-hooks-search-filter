@@ -1,18 +1,29 @@
 import React from 'react'
+import AppsIcon from '@material-ui/icons/Apps'
+import MenuIcon from '@material-ui/icons/Menu'
+import { Button, ButtonGroup, Grid } from '@material-ui/core'
 
-const LayoutToggle = ({summaryLayout, setSummaryLayout}) => {
-	const onChange = (e) => {
-		console.log(e.target.value);
-		setSummaryLayout(e.target.value);
+const LayoutToggle = ({summaryLayout, setSummaryLayout, setLoading}) => {
+
+	const handleClick = (layout) =>{
+		setLoading(true)
+		setSummaryLayout(layout)
+
+		setTimeout(() => {
+			setLoading(false)
+		}, 1000);
 	}
 	return (
-		<div style={{marginBottom: '20px', marginTop: '20px'}}>
-			Layout: <br/>
-			<label htmlFor="layout">Row
-			<input type="radio" name='layout' value='row' checked={summaryLayout ==='row'} onChange={onChange}/></label>
-			<label htmlFor="layout">Grid
-			<input type='radio' name='layout' value='grid' checked={summaryLayout ==='grid'} onChange={onChange}/></label>
-		</div>
+		<Grid item>
+			<ButtonGroup>
+				<Button color={summaryLayout ==='grid' && 'primary'} onClick={()=>handleClick('grid')} >
+					<AppsIcon />
+				</Button>
+				<Button color={summaryLayout ==='row' && 'primary'} onClick={()=>handleClick('row')} >
+					<MenuIcon />
+				</Button>
+			</ButtonGroup>
+		</Grid>
 	)
 }
 

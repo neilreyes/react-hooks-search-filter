@@ -1,3 +1,4 @@
+import { Box, Button, ButtonGroup } from '@material-ui/core';
 import React from 'react'
 
 const Pagination = (props) => {
@@ -14,15 +15,16 @@ const Pagination = (props) => {
 	}
 
 	return (
-		<nav className='pagination'>
-			<ul className='pagination-lists'>
+		<Box my="50px" display="flex" justifyContent="center">
+			<ButtonGroup >
 				{pageNumbers.map(number=>(
-					<li key={number} className='pagination-item'>
-						<a href='#' className='pagination-item-permalink' onClick={()=>paginate(number)}>{number}</a>
-					</li>
+					<Button key={number} onClick={()=>paginate(number)}>
+						{number}
+					</Button>
 				))}
-			</ul>
-		</nav>
+			</ButtonGroup>
+		</Box>
+		
 	)
 }
 
